@@ -1,4 +1,4 @@
-name: package_template
+name: nosql_dart
 description: "A new Flutter package project."
 version: 0.0.1
 home_page: http://www.icodeforyou.com
@@ -11,13 +11,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  hive_flutter: ^1.1.0
   ui_extensions_flutter:
     git: https://github.com/GitHubStuff/ui_extensions_flutter.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test: ^9.1.6
+  build_runner: ^2.4.8
   flutter_lints: ^3.0.1
+  mockito: ^5.4.4 # Mock library for Dart inspired by Mockito.
+  file: ^7.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

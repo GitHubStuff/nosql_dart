@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../gen/assets.gen.dart';
 
-import 'package:package_template/package_template.dart';
+// ignore: unused_import
+import 'package:nosql_dart/nosql_dart.dart';
 
 class HomeScaffold extends StatelessWidget {
   const HomeScaffold({super.key});
@@ -18,10 +19,6 @@ class HomeScaffold extends StatelessWidget {
   }
 
   Widget homeWidget(BuildContext context) {
-    //TODO: Replace with your own code
-    // ignore: non_constant_identifier_names
-    final PackageTemplate package_template = PackageTemplate();
-    debugPrint('$package_template');
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

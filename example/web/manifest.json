@@ -1,6 +1,6 @@
 {
-    "name": "bundleSuffix",
-    "short_name": "bundleSuffix",
+    "name": "nosql_demo",
+    "short_name": "nosql_demo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
