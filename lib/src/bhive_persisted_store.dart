@@ -58,13 +58,13 @@ class BHiveDeviceStore extends OnDeviceStore {
 
   /// Factory method to set up an in-memory Hive store.
   /// Returns an instance of `BHiveDeviceStore`.
-  static Future<BHiveDeviceStore> inMemorySetup({
+  static Future<BHiveDeviceStore> inMemorySetup<T>({
     String hiveBox = _boxName,
   }) async {
     assert(hiveBox.isNotEmpty, 'hiveBox cannot be empty');
     Directory tempDir = Directory.systemTemp.createTempSync();
     Hive.init(tempDir.path);
-    Box box = await Hive.openBox<int>(hiveBox);
+    Box box = await Hive.openBox<T>(hiveBox);
     return BHiveDeviceStore._internal(
       box,
       BHiveStoreEnum.inMemory,
@@ -75,12 +75,12 @@ class BHiveDeviceStore extends OnDeviceStore {
 
   /// Factory method to set up an on-device Hive store.
   /// Returns an instance of `BHiveDeviceStore`.
-  static Future<BHiveDeviceStore> onDeviceSetUp({
+  static Future<BHiveDeviceStore> onDeviceSetUp<T>({
     String? hiveDir,
     String hiveBox = _boxName,
   }) async {
     await Hive.initFlutter(hiveDir ?? _subDir);
-    Box box = await Hive.openBox<int>(hiveBox);
+    Box box = await Hive.openBox<T>(hiveBox);
     return BHiveDeviceStore._internal(
       box,
       BHiveStoreEnum.onDevice,
