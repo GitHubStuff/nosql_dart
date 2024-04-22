@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.3 # A Flutter package that helps implement the BLoC (Business Logic Component) design pattern.
   hive_flutter: ^1.1.0
   ui_extensions_flutter:
     git: https://github.com/GitHubStuff/ui_extensions_flutter.git
@@ -18,9 +19,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^9.1.6
-  build_runner: ^2.4.8
-  flutter_lints: ^3.0.1
+  bloc_test: ^9.1.7
+  build_runner: ^2.4.9
+  flutter_lints: ^3.0.2
   mockito: ^5.4.4 # Mock library for Dart inspired by Mockito.
   file: ^7.0.0
 
