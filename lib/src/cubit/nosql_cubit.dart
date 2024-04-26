@@ -1,49 +1,53 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show Cubit;
 
-import '../nosql_data.dart';
-import '../nosql_enum.dart';
+import '../databases/nosql_abstract.dart';
 
 part 'nosql_state.dart';
 
-class NoSqlCubit extends Cubit<NoSqlState> {
-  final NoSqlStoreStyle style;
+abstract class NoSqlCubitAbstract {
+  Future closeNoSql();
+  Future<void> initialize(String databaseName);
+  Future<void> openCollection(String collectionName);
+}
 
-  static NoSqlCubit? _instance;
+class NoSqlCubit extends Cubit<NoSqlState> implements NoSqlCubitAbstract {
+  NoSqlCubit({
+    required this.noSqlProvider,
+    required this.databaseName,
+  }) : super(NoSqlStateStart());
 
-  // Private constructor to enforce singleton pattern
-  NoSqlCubit._(this.style) : super(NoSqlStateInitial());
-
-  // Generic private factory method to handle singleton logic
-  static NoSqlCubit _getInstance(
-    NoSqlStoreStyle style, [
-    String databaseName = "",
-  ]) {
-    if (_instance != null && _instance!.style != style) {
-      throw Exception(
-          "NoSqlCubit is already initialized with a different store type.");
-    }
-    return _instance ??= NoSqlCubit._(style).._setup(databaseName);
-  }
-
-  // Public factory methods for specific store types
-  static NoSqlCubit hiveDevice({required String databaseRootName}) =>
-      _getInstance(NoSqlStoreStyle.bHiveDevice, databaseRootName);
-  static NoSqlCubit hiveMemory() => _getInstance(NoSqlStoreStyle.bHiveMemory);
-  static NoSqlCubit inMemory() => _getInstance(NoSqlStoreStyle.inMemory);
+  final NoSqlAbstract noSqlProvider;
+  final String databaseName;
 
   @override
-  Future<void> close() async {
-    await super.close();
-    _instance = null;
-  }
-
   Future<void> closeNoSql() async {
-    emit(NoSqlStateClosed());
+    try {
+      await noSqlProvider.close();
+      emit(NoSqlStateClosed());
+    } catch (error) {
+      emit(NoSqlStateError('Error closing NoSqlProvider', reason: error));
+    }
   }
 
-  Future<void> _setup(String databaseName) async {
-    // Setup logic, e.g., initializing a database
-    emit(NoSqlStateReady());
+  @override
+  Future<void> initialize(String databaseName) async {
+    try {
+      await noSqlProvider.initialize(databaseName: databaseName);
+      emit(NoSqlStateInitialized());
+    } catch (error) {
+      emit(NoSqlStateError('Error initializing NoSqlProvider', reason: error));
+    }
+  }
+
+  @override
+  Future<void> openCollection(String collectionName) async {
+    try {
+      await noSqlProvider.openCollection(collectionName: collectionName);
+      emit(NoSqlStateReady());
+    } catch (error) {
+      emit(NoSqlStateError('Error opening collection', reason: error));
+    }
   }
 }

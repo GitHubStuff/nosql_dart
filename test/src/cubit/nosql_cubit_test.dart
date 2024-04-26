@@ -1,32 +1,40 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:nosql_dart/src/cubit/nosql_cubit.dart';
+import 'package:nosql_dart/nosql_dart.dart';
+
+late NoSqlInMemory mockProvider;
+late NoSqlCubit testCubit;
 
 void main() {
-  group('NoSqlCubit', () {
-    tearDown(() {
-      //NoSqlCubit._instance = null; // Ensures _instance is reset after each test
-    });
+  setUp(() {
+    mockProvider = NoSqlInMemory();
+    testCubit = NoSqlCubit(noSqlProvider: mockProvider, databaseName: 'test');
+  });
+  tearDown(() {});
 
-    test('should enforce singleton pattern with hiveDevice', () {
-      var cubit1 = NoSqlCubit.hiveMemory();
-      var cubit2 = NoSqlCubit.hiveMemory();
-      expect(identical(cubit1, cubit2), isTrue);
+  group('NoSqlCubit - Creating cubit:', () {
+    test('Should return an instance of NoSqlCubit', () {
+      expect(testCubit, isA<NoSqlCubit>());
+      expect(mockProvider.databaseName, equals('<memory>'));
     });
-
-    test('throws exception when trying to create a different type of instance',
-        () {
-      NoSqlCubit.hiveMemory();
-      expect(() => NoSqlCubit.inMemory(), throwsA(isA<Exception>()));
-    });
-
     blocTest<NoSqlCubit, NoSqlState>(
-      'emits [NoSqlStateClosed] when closed',
-      build: () => NoSqlCubit.hiveMemory(),
-      act: (cubit) => cubit.closeNoSql(),
-      expect: () => [isA<NoSqlStateClosed>()],
+      'Should return status of notInitialized',
+      build: () => testCubit,
+      act: (cubit) => cubit.initialize('test'),
+      expect: () => [NoSqlStateInitialized()],
     );
+  });
 
-    // Additional tests can include the specific behaviors of the _setup method and other business logic
+  group('NoSql methods:', () {
+    blocTest<NoSqlCubit, NoSqlState>(
+      'Try to close un-initialized NoSqlProvider',
+      build: () => testCubit,
+      act: (cubit) {
+        cubit.closeNoSql();
+      },
+      expect: () => [
+        isA<NoSqlStateError>(),
+      ],
+    );
   });
 }
