@@ -6,11 +6,7 @@ import '../databases/nosql_abstract.dart';
 
 part 'nosql_state.dart';
 
-abstract class NoSqlCubitAbstract {
-  Future closeNoSql();
-  Future<void> initialize(String databaseName);
-  Future<void> openCollection(String collectionName);
-}
+abstract class NoSqlCubitAbstract {}
 
 class NoSqlCubit extends Cubit<NoSqlState> implements NoSqlCubitAbstract {
   NoSqlCubit({
@@ -20,34 +16,4 @@ class NoSqlCubit extends Cubit<NoSqlState> implements NoSqlCubitAbstract {
 
   final NoSqlAbstract noSqlProvider;
   final String databaseName;
-
-  @override
-  Future<void> closeNoSql() async {
-    try {
-      await noSqlProvider.close();
-      emit(NoSqlStateClosed());
-    } catch (error) {
-      emit(NoSqlStateError('Error closing NoSqlProvider', reason: error));
-    }
-  }
-
-  @override
-  Future<void> initialize(String databaseName) async {
-    try {
-      await noSqlProvider.initialize(databaseName: databaseName);
-      emit(NoSqlStateInitialized());
-    } catch (error) {
-      emit(NoSqlStateError('Error initializing NoSqlProvider', reason: error));
-    }
-  }
-
-  @override
-  Future<void> openCollection(String collectionName) async {
-    try {
-      await noSqlProvider.openCollection(collectionName: collectionName);
-      emit(NoSqlStateReady());
-    } catch (error) {
-      emit(NoSqlStateError('Error opening collection', reason: error));
-    }
-  }
 }
