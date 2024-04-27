@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'nosql_hive_mock.dart';
+import 'package:nosql_dart/nosql_dart.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('NoSqlHive Initialization Tests:', () {
-    late MockHive database;
-    setUp(() async => database = MockHive());
+    late NoSqlHiveTemp database;
+    setUp(() async => database = NoSqlHiveTemp());
 
     tearDown(() async {
       try {
@@ -28,10 +28,10 @@ void main() {
   });
 
   group('NoSqlHive Disk Operations:', () {
-    late MockHive database;
+    late NoSqlHiveTemp database;
 
     setUp(() async {
-      database = MockHive();
+      database = NoSqlHiveTemp();
       await database.init(databaseName: 'mockito');
     });
 
@@ -46,9 +46,9 @@ void main() {
   });
 
   group('NoSqlHive Container Operations:', () {
-    late MockHive database;
+    late NoSqlHiveTemp database;
 
-    setUp(() async => database = MockHive());
+    setUp(() async => database = NoSqlHiveTemp());
 
     test('Open collection before init should fail', () async {
       expectLater(
@@ -74,10 +74,10 @@ void main() {
   });
 
   group('NoSqlHive Data Manipulation:', () {
-    late MockHive database;
+    late NoSqlHiveTemp database;
 
     setUp(() async {
-      database = MockHive();
+      database = NoSqlHiveTemp();
       await database.init(databaseName: 'mockito');
     });
 
@@ -92,9 +92,9 @@ void main() {
   });
 
   group('NoSqlHive Lifecycle:', () {
-    late MockHive database;
+    late NoSqlHiveTemp database;
 
-    setUp(() async => database = MockHive());
+    setUp(() async => database = NoSqlHiveTemp());
 
     test('PUT, close, re-init, and GET', () async {
       const String dbName = 'complx';
