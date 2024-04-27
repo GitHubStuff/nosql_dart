@@ -1,3 +1,4 @@
+/*
 /// A Dart library for working with files and directories using a simple, synchronous API.
 library;
 
@@ -128,3 +129,4 @@ class BHiveDeviceStore extends OnDeviceStore {
   @override
   bool get isUnavailable => _tempDir == null || !_box.isOpen;
 }
+*/

@@ -28,7 +28,7 @@ class HomeScaffold extends StatelessWidget {
             height: 200,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Assets.images.ltmm1024x1024.image(),
+              child: Assets.images.nosql1024.image(),
             ),
           ),
         ],
