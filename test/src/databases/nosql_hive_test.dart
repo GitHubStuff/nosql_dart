@@ -2,6 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nosql_dart/nosql_dart.dart';
 
+const isNoSqlError = TypeMatcher<NoSqlError>();
+final Matcher throwsNoSqlError = throwsA(isNoSqlError);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -23,7 +26,7 @@ void main() {
 
     test('Initialize database twice to confirm error', () async {
       await database.init(databaseName: 'mockito');
-      expectLater(database.init(databaseName: 'mockito'), throwsStateError);
+      expectLater(database.init(databaseName: 'mockito'), throwsNoSqlError);
     });
   });
 
@@ -41,7 +44,7 @@ void main() {
     });
 
     test('Delete from disk without closing', () async {
-      expect(database.deleteFromDisk(), throwsStateError);
+      expect(database.deleteFromDisk(), throwsNoSqlError);
     });
   });
 
@@ -53,7 +56,7 @@ void main() {
     test('Open collection before init should fail', () async {
       expectLater(
         () => database.openContainer<Box, String>(name: 'mock_box'),
-        throwsStateError,
+        throwsNoSqlError,
       );
     });
 

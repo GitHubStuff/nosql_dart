@@ -16,7 +16,7 @@ abstract class NoSqlAbstract {
   Future<void> deleteFromDisk();
 }
 
-/// Extension on String to get the base name of a file.
+///EXTENSION on String to get the base name of a file.
 extension FileName on String {
   String get baseName {
     // Splitting the string by '/' and getting the last part.

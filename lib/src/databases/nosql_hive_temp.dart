@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nosql_dart/src/databases/nosql_abstract.dart';
+import 'package:nosql_dart/src/nosql_error.dart';
 
 class NoSqlHiveTemp implements NoSqlAbstract {
   NoSqlHiveTemp();
@@ -21,7 +22,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
     } else if (noSqlState == NoSqlStateEnum.closed) {
       tempDir = tempDir;
     } else if (noSqlState == NoSqlStateEnum.initialized) {
-      throw StateError('$databaseName already initialized');
+      throw NoSqlError('🛑 $databaseName already initialized');
     }
 
     try {
@@ -29,18 +30,18 @@ class NoSqlHiveTemp implements NoSqlAbstract {
       noSqlState = NoSqlStateEnum.initialized;
     } catch (error, stack) {
       debugPrint('⛔️ ‼️Error initializing database: $error\n$stack');
-      throw StateError('Cannot initialize database');
+      throw NoSqlError('Cannot initialize database');
     }
   }
 
   @override
   Future<void> close<C>({required C container}) {
     if (noSqlState != NoSqlStateEnum.initialized) {
-      throw StateError('Database not initialized');
+      throw NoSqlError('Database not initialized');
     }
     Box box = container as Box;
     if (!box.isOpen) {
-      throw StateError('Box:${box.name} is not open');
+      throw NoSqlError('Box:${box.name} is not open');
     }
     return box.close();
   }
@@ -48,7 +49,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
   @override
   Future<void> closeDatabase() {
     if (noSqlState != NoSqlStateEnum.initialized) {
-      throw StateError('Database not initialized');
+      throw NoSqlError('Database not initialized');
     }
     noSqlState = NoSqlStateEnum.closed;
     return Hive.close();
@@ -57,7 +58,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
   @override
   Future<void> deleteFromDisk() async {
     if (noSqlState != NoSqlStateEnum.closed) {
-      throw StateError('Database not closed');
+      throw NoSqlError('Database not closed');
     }
     noSqlState = null;
 
@@ -72,7 +73,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
   }) {
     final box = fromContainer as Box;
     if (!box.isOpen) {
-      throw StateError('Box:${box.name} is not open');
+      throw NoSqlError('Box:${box.name} is not open');
     }
     return box.get(key, defaultValue: defaultValue);
   }
@@ -81,7 +82,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
   Future<void> put<C, T>(String key, T value, {required C intoContainer}) {
     final box = intoContainer as Box;
     if (!box.isOpen) {
-      throw StateError('Box:${box.name} is not open');
+      throw NoSqlError('Box:${box.name} is not open');
     }
     return (intoContainer as Box).put(key, value);
   }
@@ -89,7 +90,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
   @override
   Future<C> openContainer<C, T>({required String name}) {
     if (noSqlState != NoSqlStateEnum.initialized) {
-      throw StateError('❌ Database not initialized');
+      throw NoSqlError('❌ Database not initialized');
     }
     return Hive.openBox<T>(name) as Future<C>;
   }
