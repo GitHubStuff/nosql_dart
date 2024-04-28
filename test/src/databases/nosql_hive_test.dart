@@ -84,8 +84,7 @@ void main() {
     test('PUT and GET data', () async {
       Box<String> stringBox =
           await database.openContainer<Box<String>, String>(name: 'mock_box');
-      await database.put<Box, String>('key1', 'value1',
-          intoContainer: stringBox);
+      database.put<Box, String>('key1', 'value1', intoContainer: stringBox);
       String result = database.get<Box>('key1', fromContainer: stringBox);
       expect(result, 'value1');
     });
@@ -101,8 +100,7 @@ void main() {
       await database.init(databaseName: dbName);
       Box<String> stringBox = await database.openContainer<Box<String>, String>(
           name: 'mockcontainer');
-      await database.put<Box, String>('key1', 'value1',
-          intoContainer: stringBox);
+      database.put<Box, String>('key1', 'value1', intoContainer: stringBox);
       await database.closeDatabase();
 
       await database.init(databaseName: dbName);
