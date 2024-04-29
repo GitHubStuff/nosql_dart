@@ -1,10 +1,12 @@
-enum NoSqlStateEnum { initialized, closed }
+enum NoSqlStateSemaphoreEnum { blank, initialized, closed }
 
 abstract class NoSqlAbstract {
   /// The directory where the Hive databases are stored.
   static const String hiveDirectory = 'hive_icfy_databases_v1r373663';
 
   String get databaseName;
+
+  NoSqlStateSemaphoreEnum? get noSqlSemaphore;
 
   /// Class methods.
   Future<void> init({required String databaseName});

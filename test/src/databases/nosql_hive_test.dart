@@ -26,7 +26,7 @@ void main() {
 
     test('Initialize database twice to confirm error', () async {
       await database.init(databaseName: 'mockito');
-      expectLater(database.init(databaseName: 'mockito'), throwsNoSqlError);
+      expectLater(database.init(databaseName: 'mockito'), completes);
     });
   });
 
