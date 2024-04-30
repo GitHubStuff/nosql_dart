@@ -6,7 +6,8 @@ abstract class NoSqlAbstract {
 
   String get databaseName;
 
-  NoSqlStateSemaphoreEnum? get noSqlSemaphore;
+  NoSqlStateSemaphoreEnum get noSqlSemaphore;
+  bool isDatabaseReady();
 
   /// Class methods.
   Future<void> init({required String databaseName});

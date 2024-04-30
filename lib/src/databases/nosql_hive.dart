@@ -24,4 +24,8 @@ class NoSqlHive extends NoSqlHiveTemp {
     noSqlSemaphore = NoSqlStateSemaphoreEnum.initialized;
     debugPrint('OUT > NoSqlHive.init');
   }
+
+  @override
+  bool isDatabaseReady() =>
+      noSqlSemaphore == NoSqlStateSemaphoreEnum.initialized;
 }

@@ -1,6 +1,6 @@
 name: nosql_dart
 description: "Package to connect to NoSQL Hive database in Dart."
-version: 0.0.3+2
+version: 0.0.3+5
 home_page: http://www.icodeforyou.com
 publish_to: none # Remove this line if you wish to publish to pub.dev
 

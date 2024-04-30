@@ -31,15 +31,14 @@ class NoSqlHiveTemp implements NoSqlAbstract {
     try {
       Hive.init(tempDir!.path);
       noSqlSemaphore = NoSqlStateSemaphoreEnum.initialized;
-    } catch (error, stack) {
-      debugPrint('⛔️ ‼️Error initializing database: $error\n$stack');
-      throw NoSqlError('Cannot initialize database');
+    } catch (_, stack) {
+      throw NoSqlError('Cannot initialize database\n$stack');
     }
   }
 
   @override
   Future<void> close<C>({required C container}) {
-    if (noSqlSemaphore != NoSqlStateSemaphoreEnum.initialized) {
+    if (!isDatabaseReady()) {
       throw NoSqlError('Database not initialized');
     }
     Box box = container as Box;
@@ -48,6 +47,10 @@ class NoSqlHiveTemp implements NoSqlAbstract {
     }
     return box.close();
   }
+
+  @override
+  bool isDatabaseReady() =>
+      noSqlSemaphore == NoSqlStateSemaphoreEnum.initialized;
 
   @override
   Future<void> closeDatabase() {
@@ -64,7 +67,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
       throw NoSqlError('Database not closed');
     }
     noSqlSemaphore = NoSqlStateSemaphoreEnum.blank;
-
+    debugPrint('🧨 DELETED FROM DISK');
     return Hive.deleteFromDisk();
   }
 
@@ -92,7 +95,7 @@ class NoSqlHiveTemp implements NoSqlAbstract {
 
   @override
   Future<C> openContainer<C, T>({required String name}) {
-    if (noSqlSemaphore != NoSqlStateSemaphoreEnum.initialized) {
+    if (!isDatabaseReady()) {
       throw NoSqlError('❌ Database not initialized');
     }
     return Hive.openBox<T>(name) as Future<C>;
