@@ -15,14 +15,12 @@ class NoSqlHive extends NoSqlHiveTemp {
 
   @override
   Future<void> init({required String databaseName}) async {
-    debugPrint('IN < NoSqlHive.init');
     this.databaseName = databaseName;
     Directory? dir = await getApplicationDocumentsDirectory();
     final String path =
         '${dir.path}/${NoSqlAbstract.hiveDirectory}/$databaseName';
     Hive.init(path);
     noSqlSemaphore = NoSqlStateSemaphoreEnum.initialized;
-    debugPrint('OUT > NoSqlHive.init');
   }
 
   @override

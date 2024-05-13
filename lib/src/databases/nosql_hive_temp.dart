@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:nosql_dart/src/databases/nosql_abstract.dart';
 import 'package:nosql_dart/src/nosql_error.dart';
 
@@ -67,7 +68,17 @@ class NoSqlHiveTemp implements NoSqlAbstract {
       throw NoSqlError('Database not closed');
     }
     noSqlSemaphore = NoSqlStateSemaphoreEnum.blank;
-    debugPrint('🧨 DELETED FROM DISK');
+    final logger = Logger(
+      printer: PrettyPrinter(
+          methodCount: 2, // Number of method calls to be displayed
+          errorMethodCount:
+              8, // Number of method calls if stacktrace is provided
+          lineLength: 120, // Width of the output
+          colors: true, // Colorful log messages
+          printEmojis: true, // Print an emoji for each log message
+          printTime: false),
+    ); // Should each log print contain a timestamp);
+    logger.i('🧨 DELETED FROM DISK');
     return Hive.deleteFromDisk();
   }
 
